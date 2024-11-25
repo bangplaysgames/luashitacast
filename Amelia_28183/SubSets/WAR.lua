@@ -5,7 +5,7 @@ sub.TP = {
     Neck = 'Peacock Charm',
     Ear1 = 'Fang Earring',
     Ear2 = 'Fowling Earring',
-    Body = 'Askar Korazin',
+    Body = 'Adaman Hauberk',
     Hands = 'Dusk Gloves',
     Ring1 = 'Rajas Ring',
     Ring2 = 'Jaeger Ring',
@@ -37,7 +37,7 @@ sub.MAB = {
 
 sub.STR = {
     Head = 'Voyager Sallet',
-    Body = 'Askar Korazin',
+    Body = 'Adaman Hauberk',
     Neck = 'Chivalrous Chain',
     Ear2 = 'Fowling Earring',
     Hands = 'Aurum Gauntlets',
@@ -75,6 +75,7 @@ sub.H2HExp = {
 
 sub.Override = {
     TP = {
+        Body = 'Adaman Hauberk',
         Legs = 'Byakko\'s Haidate'
     }
 }

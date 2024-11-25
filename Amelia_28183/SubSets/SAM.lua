@@ -51,6 +51,7 @@ sub.STR = {
 
 sub.Override = {
     TP = {
+        Body = 'Haubergeon',
         Legs = 'Byakko\'s Haidate'
     }
 }

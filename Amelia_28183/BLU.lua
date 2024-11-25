@@ -280,7 +280,7 @@ profile.HandleAbility = function()
         AshitaCore:GetChatManager():QueueCommand(-1, '/ja "Spectral Jig" <me>');
     end
 
-    if(string.find(act.Name, 'Waltz'))then
+    if(act.Name:any('waltz'))then
         actionSet = gFunc.Combine(actionSet, sets.Waltz);
     end
 
@@ -294,7 +294,7 @@ profile.HandleAbility = function()
         actionSet = gFunc.Combine(actionSet, sets.Med);
     end
 
-    if(string.find(act.Name, 'Jig'))then
+    if(act.Name:any('jig'))then
         actionSet = gFunc.Combine(actionSet, sets.Jig);
     end
 
@@ -312,10 +312,6 @@ profile.HandleAbility = function()
 
     if(act.Name == 'Violent Flourish')then
         actionSet = gFunc.Combine(actionSet, sets.VF);
-    end
-
-    if(string.find(act.Name, 'waltz'))then
-        actionSet = gFunc.Combine(actionSet, sets.Waltz);
     end
 
     if(string.find(act.Name, 'jig'))then
