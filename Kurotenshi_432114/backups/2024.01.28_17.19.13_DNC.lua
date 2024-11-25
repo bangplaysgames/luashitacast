@@ -1,0 +1,345 @@
+local profile = {};
+
+local mod = gFunc.LoadFile('..\\lib\\modifierTables.lua');
+
+local warpring = function()
+    AshitaCore:GetChatManager():QueueCommand(-1, '/item "Warp Ring" <me>');
+end
+
+local sets = {
+    Idle = {
+        Main = 'Ipetam',
+        Sub = 'Izhiikoh',
+        Range = 'Aliyat Chakram',
+        Head = 'Gleti\'s Mask',
+        Neck = 'Loricate Torque',
+        Ear1 = 'Bladeborn Earring',
+        Ear2 = 'Steelflash Earring',
+        Body = 'Gleti\'s Cuirass',
+        Hands = 'Meg. Gloves +2',
+        Ring1 = 'Sheltered Ring',
+        Ring2 = 'Paguroidea Ring',
+        Back = 'Senuna\'s Mantle',
+        Waist = 'Reiki Yotai',
+        Legs = 'Gleti\'s Breeches',
+        Feet = 'Macu. Toe Shoes +1',
+    },
+
+    ['TP_WAR'] = {
+        Main = 'Gleti\'s Knife',
+        Sub = 'Izhiikoh',
+        Range = 'Aliyat Chakram',
+        Head = 'Maculele Tiara +2',
+        Neck = 'Etoile Gorget +1',
+        Ear1 = 'Bladeborn Earring',
+        Ear2 = 'Steelflash Earring',
+        Body = 'Macu. Casaque +2',
+        Hands = 'Macu. Bangles +2',
+        Ring1 = 'Mummu Ring',
+        Ring2 = 'Rajas Ring',
+        Back = { Name = 'Senuna\'s Mantle', Augment = { [1] = 'Accuracy+20', [2] = 'Weapon skill damage +10%', [3] = 'Attack+20', [4] = 'DEX+30' } },
+        Waist = 'Reiki Yotai',
+        Legs = 'Maculele Tights +2',
+        Feet = 'Mummu Gamash. +2',
+    },
+
+    Waltz = {
+        Main = 'Ipetam',
+        Sub = 'Izhiikoh',
+        Range = 'Aliyat Chakram',
+        Head = 'Etoile Tiara',
+        Neck = 'Etoile Gorget +1',
+        Ear1 = 'Bladeborn Earring',
+        Ear2 = 'Steelflash Earring',
+        Body = 'Maxixi Casaque +2',
+        Hands = 'Meg. Gloves +2',
+        Ring1 = 'Sheltered Ring',
+        Ring2 = 'Paguroidea Ring',
+        Back = 'Toetapper Mantle',
+        Waist = 'Reiji Yotai',
+        Legs = 'Dashing Subligar',
+        Feet = 'Maxixi Toe Shoes',
+    },
+
+    ReverseFlourish = {
+        Hands = 'Macu. Bangles +2',
+    },
+
+    Haste = {},
+
+    STR = {
+        Main = 'Gleti\'s Knife',
+        Sub = 'Izhiikoh',
+        Range = 'Aliyat Chakram',
+        Head = 'Maculele Tiara +2',
+        Neck = 'Sanctity Necklace',
+        Ear1 = 'Bladeborn Earring',
+        Ear2 = 'Steelflash Earring',
+        Body = 'Nyame Mail',
+        Hands = 'Meg. Gloves +2',
+        Ring1 = 'K\'ayres Ring',
+        Ring2 = 'Rajas Ring',
+        Back = { Name = 'Senuna\'s Mantle', Augment = { [1] = 'Accuracy+20', [2] = 'Weapon skill damage +10%', [3] = 'Attack+20', [4] = 'DEX+30' } },
+        Waist = 'Reiki Yotai',
+        Legs = 'Maculele Tights +2',
+        Feet = 'Mummu Gamash. +2',
+    },
+
+    ['DEX'] = {
+        Main = 'Gleti\'s Knife',
+        Sub = 'Izhiikoh',
+        Range = 'Aliyat Chakram',
+        Head = 'Maculele Tiara +2',
+        Neck = 'Sanctity Necklace',
+        Ear1 = 'Bladeborn Earring',
+        Ear2 = 'Steelflash Earring',
+        Body = 'Nyame Mail',
+        Hands = 'Meg. Gloves +2',
+        Ring1 = 'K\'ayres Ring',
+        Ring2 = 'Rajas Ring',
+        Back = { Name = 'Senuna\'s Mantle', Augment = { [1] = 'Accuracy+20', [2] = 'Weapon skill damage +10%', [3] = 'Attack+20', [4] = 'DEX+30' } },
+        Waist = 'Reiki Yotai',
+        Legs = 'Maculele Tights +2',
+        Feet = 'Mummu Gamash. +2',
+    },
+
+    Cap = {
+        Back = 'Mecisto. Mantle'
+    }
+,
+    Jig = {
+        Main = 'Ipetam',
+        Sub = 'Izhiikoh',
+        Range = 'Aliyat Chakram',
+        Head = 'Whirlpool Mask',
+        Neck = 'Loricate Torque',
+        Ear1 = 'Bladeborn Earring',
+        Ear2 = 'Steelflash Earring',
+        Body = 'Mekosu. Harness',
+        Hands = 'Umuthi Gloves',
+        Ring1 = 'Sheltered Ring',
+        Ring2 = 'Paguroidea Ring',
+        Back = 'Atheling Mantle',
+        Waist = 'Windbuffet Belt',
+        Legs = 'Ighwa Trousers',
+        Feet = 'Maxixi Toe Shoes',
+    },
+
+    MAB = {
+        
+    }
+};
+profile.Sets = sets;
+
+profile.Packer = {
+};
+
+local Settings = {
+    CurrentLevel = 0,
+    CurrentSub = '',
+    TP_Mode = 'Haste',
+    wrdelay = 0,
+    itemuse = false;
+}
+
+local Gorgets = {
+}
+
+profile.OnLoad = function()
+    gSettings.AllowAddSet = true;
+    AshitaCore:GetChatManager():QueueCommand(-1, '/lac disable main');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/lac disable sub');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/lac disable ammo');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias /tpmode /lac fwd tpmode');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias /warpring /lac fwd warpring');
+end
+
+profile.OnUnload = function()
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /tpmode');
+end
+
+profile.HandleCommand = function(args)
+    if(#args > 0)then
+        if(#args == 1)then
+            if(args[1]:any('tpmode'))then
+                if(Settings.TP_Mode == 'Cap')then
+                    Settings.TP_Mode = 'Acc';
+                elseif(Settings.TP_Mode == 'Acc')then
+                    Settings.TP_Mode = 'Eva';
+                elseif(Settings.TP_Mode == 'Eva')then
+                    Settings.TP_Mode = 'Haste';
+                elseif(Settings.TP_Mode == 'Haste')then
+                    Settings.TP_Mode = 'Cap';
+                end
+                print(chat.header('TP Mode:'), chat.error(Settings.TP_Mode));
+                return;
+            end
+        end
+        if(args[1]:any('tpmode'))then
+            if(args[2]:any('Haste'))then
+                Settings.TP_Mode = 'Haste';
+            elseif(args[2]:any('Acc'))then
+                Settings.TP_Mode = 'Acc';
+            elseif(args[2]:any('Eva'))then
+                Settings.TP_Mode = 'Eva';
+            elseif(args[2]:any('Cap'))then
+                Settings.TP_Mode = 'Cap';
+            end
+            print(chat.header('TP Mode:'), chat.error(Settings.TP_Mode));
+        end
+        if(args[1]:any('warpring'))then
+            Settings.wrdelay = os.time() + 12;
+            Settings.itemuse = false;
+        end
+    end
+end
+
+profile.HandleDefault = function()
+    --Player Info
+    local player = gData.GetPlayer();
+
+    --Climactic Flourish
+    local cfActive = gData.GetBuffCount("Climactic Flourish") > 0;
+
+    --Handle Level Sync Adjustments
+    local myLevel = AshitaCore:GetMemoryManager():GetPlayer():GetMainJobLevel();
+    if (myLevel ~= Settings.CurrentLevel) then
+        gFunc.EvaluateLevels(profile.Sets, myLevel);
+        Settings.CurrentLevel = myLevel;
+    end
+
+    --Handle Subjob Adjustments
+    local sub = player.SubJob;
+    if (sub ~= Settings.CurrentSub)then
+        Settings.CurrentSub = sub;
+    end
+
+    if(Settings.itemuse == false)then
+        if(Settings.wrdelay ~= 0)then
+            gFunc.Equip('ring1', 'Warp Ring');
+        end
+        if(Settings.wrdelay <= os.time())then
+            if(Settings.itemuse == false)then
+                Settings.itemuse = true;
+                warpring();
+            end
+        end
+        return;
+    end
+
+    --Idle
+    local subTP = 'TP_'.. tostring(sub);
+    if (player.Status == 'Engaged') then
+        --Select and equip TP set based on subjob while engaged
+        if(sets[subTP] == nil)then
+            gFunc.EquipSet(gFunc.Combine(sets.TP_WAR, sets[Settings.TP_Mode]));
+        else
+            gFunc.EquipSet(gFunc.Combine(sets[subTP], sets[Settings.TP_Mode]));
+        end
+    elseif (player.Status == 'Resting') then
+        gFunc.EquipSet(sets.Resting);
+    else
+            --Equip Idle set
+            gFunc.EquipSet(sets.Idle);
+            if(player.IsMoving)then
+                gFunc.Equip('Feet', 'Tandava Crackows');
+            end
+    end
+
+    if(cfActive == true)then
+        gFunc.Equip('Head', 'Maculele Tiara +2');
+    end
+
+    --[[if(gData.GetBuffCount('Haste Samba') < 1 and player.TP >= 350)then
+        AshitaCore:GetChatManager():QueueCommand(-1, '/ja "Haste Samba" <me>');
+    end
+
+    if(gData.GetBuffCount('Saber Dance') < 1)then
+        AshitaCore:GetChatManager():QueueCommand(-1, '/ja "Saber Dance" <me>');
+    end
+
+    if(player.TP >= 1000)then
+        AshitaCore:GetChatManager():QueueCommand(-1, '/ws "Evisceration" <t>');
+    end]]
+
+end
+
+profile.HandleAbility = function()
+    local act = gData.GetAction();
+    local player = gData.GetPlayer();
+    local isSneak = gData.GetBuffCount('Sneak') > 0;
+
+    if(act.Name == 'Spectral Jig')then
+        if(isSneak == true)then
+            gFunc.CancelAction();
+            AshitaCore:GetChatManager():QueueCommand(-1, '/debuff 71');
+        end
+        AshitaCore:GetChatManager():QueueCommand(-1, '/ja "Spectral Jig" <me>');
+    end
+
+    if(string.find(act.Name, 'Waltz'))then
+        gFunc.EquipSet(sets.Waltz);
+    end
+
+    if(string.find(act.Name, 'Reverse Flourish'))then
+        gFunc.EquipSet(sets.ReverseFlourish);
+    end
+
+    if(act.Name == 'Jump' or act.Name == 'High Jump')then
+        gFunc.EquipSet(sets.Jump);
+    elseif(act.Name == 'Meditate')then
+        gFunc.EquipSet(sets.Med);
+    end
+
+    if(act.Name == 'Climactic Flourish')then
+        gFunc.Equip('Head', 'Maculele Tiara +2');
+    end
+
+    if(string.find(act.Name, 'Jig'))then
+        gFunc.EquipSet(sets.Jig);
+    end
+
+end
+
+profile.HandleItem = function()
+    local action = gData.GetAction();
+
+    if(action.Name == 'Warp Ring')then
+        Settings.wrdelay = 0;
+    end
+end
+
+profile.HandlePrecast = function()
+end
+
+profile.HandleMidcast = function()
+end
+
+profile.HandlePreshot = function()
+end
+
+profile.HandleMidshot = function()
+    gFunc.EquipSet(sets.RACC);
+end
+
+profile.HandleWeaponskill = function()
+    local act = gData.GetAction();
+    local mods = mod.getMods(act.Name);
+    local scProp = mod.getGorget(act.Name, Gorgets);
+    local wsSet = sets[mods];
+
+    --Climactic Flourish
+    local cfActive = gData.GetBuffCount("Climactic Flourish") > 0;
+
+    gFunc.EquipSet(wsSet);
+    if(scProp ~= nil)then
+        gFunc.Equip('Neck', scProp .. ' Gorget');
+    end
+    gFunc.Equip('Waist', 'Fotia Belt');
+
+    if(cfActive == true)then
+        gFunc.Equip('Head', 'Maculele Tiara');
+    end
+end
+
+return profile;
