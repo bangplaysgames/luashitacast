@@ -161,6 +161,9 @@ profile.HandleDefault = function()
         local subOverrides;
         local mainOverrides;
 
+        sets = nil
+        sets = {}
+
         for k,v in pairs(mainsets)do
             --Bypass Overrides
             if(k == 'Override')then
@@ -188,9 +191,13 @@ profile.HandleDefault = function()
                 subOverrides = v;
             end
         end
+
+        --Adjust for Main Job Overrides
         for k,v in pairs(mainOverrides)do
             sets[k] = gFunc.Combine(sets[k], v);
         end
+
+        --Adjust for Sub Job Overrides
         for k,v in pairs(subOverrides)do
             sets[k] = gFunc.Combine(sets[k], v);
         end
