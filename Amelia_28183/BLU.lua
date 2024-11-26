@@ -160,49 +160,7 @@ profile.HandleDefault = function()
 
     if ((sub ~= 'NON' and sub ~= help.CurrentSub) or reassignSets)then
         help.CurrentSub = sub;
-        local subOverrides;
-        local mainOverrides;
-
-        sets = nil
-        sets = {}
-
-        for k,v in pairs(mainsets)do
-            --Bypass Overrides
-            if(k == 'Override')then
-                mainOverrides = v;
-            else
-                --Declare the set name
-                if(sets[k] == nil)then
-                    sets[k] = {}
-                end
-                --Define sets from main job.  This is to accommodate any sets that the main job may have defined that are not shared.
-                sets[k] = v;
-            end
-        end
-        for k,v in pairs(subsets) do
-            --Bypass Overrides
-            if(k ~= 'Override')then
-                --Check if the Main Job has a predefined set.  If so, it will combine the main job's set with the subjob's set.
-                if(mainsets[k] ~= nil)then
-                    sets[k] = gFunc.Combine(sets[k], v);
-                else
-                    --If no main job set, then it takes the subjob set.
-                    sets[k] = v;
-                end
-            else
-                subOverrides = v;
-            end
-        end
-
-        --Adjust for Main Job Overrides
-        for k,v in pairs(mainOverrides)do
-            sets[k] = gFunc.Combine(sets[k], v);
-        end
-
-        --Adjust for Sub Job Overrides
-        for k,v in pairs(subOverrides)do
-            sets[k] = gFunc.Combine(sets[k], v);
-        end
+        sets = jobHelpers.GetSets(mainsets, subsets)
         reassignSets = false;
         AshitaCore:GetChatManager():QueueCommand(-1, '/tb palette change '.. main ..'/' .. sub);
     end
@@ -240,6 +198,11 @@ profile.HandleDefault = function()
         end
         if(gData.GetBuffCount('Sneak Attack') > 0)then
             stateSet = gFunc.Combine(stateSet, sets.DEX);
+        end
+        if(player.MainJob == 'THF' or player.SubJob == 'THF')then
+            if(targetId ~= nil and not help.thTable[targetId].THApplied)then
+                stateSet = gFunc.Combine(stateSet, sets.TH);
+            end
         end
 
     elseif (player.Status == 'Resting') then

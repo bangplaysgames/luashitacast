@@ -1,6 +1,8 @@
 local sub = {}
 
 sub.TP = {
+        Main = 'Papilio Kirpan',
+        Sub = 'Joyeuse',
         Head = 'Walahra Turban',
         Neck = 'Peacock Charm',
         Ear1 = 'Fang Earring',

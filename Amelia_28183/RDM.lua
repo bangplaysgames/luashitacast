@@ -86,35 +86,66 @@ end
 profile.HandleDefault = function()
     --Player Info
     local player = gData.GetPlayer();
+    local pet = gData.GetPet();
+    local target = gData.GetTarget();
+    local targetId;
+    if(target ~= nil)then
+        targetId = tostring(target.Id);
+    end
+
+    --Create Entry into TH table for target
+    if (targetId ~= nil and (player.MainJob == 'THF' or player.SubJob == 'THF')) then
+        if(help.thTable[targetId] == nil)then
+            help.thTable[targetId] = {}
+            help.thTable[targetId].THApplied = false;
+        end
+    end
 
     local main = player.MainJob;
-
-    local pet = gData.GetPet();
-
-    --Handle Subjob Adjustments
     local sub = player.SubJob;
-    if (sub ~= 'NON' and sub ~= help.CurrentSub)then
+    if(setTH)then
+        if(Settings.thWeapons)then
+            sets['TH'].Main = 'Thief\'s Knife';
+            sets['TH'].Sub = 'Thief\'s Knife';
+        else
+            sets['TH'].Main = subsets['TP'].Main;
+            sets['TH'].Sub = subsets['TP'].Sub;
+        end
+        print(chat.header('Setting TH Weapons to:  '.. sets['TH'].Main .. ' and ' .. sets['TH'].Sub));
+        setTH = false;
+    end
+
+    if(main == 'NON' or sub == 'NON')then
+        return;
+    end
+
+    if(prioChange)then
+        if(Settings.jobPriority == 'main')then
+            print('Setting Priority to ' .. main .. ' > ' .. sub);
+            mainsets = gFunc.LoadFile('SubSets\\'.. sub .. '.lua');
+            subsets = gFunc.LoadFile('SubSets\\'.. main .. '.lua');
+            reassignSets = true;
+        else
+            print('Setting Priority to '.. main .. ' > ' .. sub);
+            subsets = gFunc.LoadFile('SubSets\\' .. sub .. '.lua');
+            mainsets = gFunc.LoadFile('SubSets\\' .. main .. '.lua');
+            reassignSets = true;
+        end
+        prioChange = false;
+    end
+
+    if ((sub ~= 'NON' and sub ~= help.CurrentSub) or reassignSets)then
         help.CurrentSub = sub;
-        local subsets = gFunc.LoadFile('SubSets\\' .. sub .. '.lua');
-        local mainsets = gFunc.LoadFile('SubSets\\' .. main .. '.lua');
-        for k,v in pairs(mainsets)do
-            --Declare the set name
-            if(sets[k] == nil)then
-                sets[k] = {}
-            end
-            --Define sets from main job.  This is to accommodate any sets that the main job may have defined that are not shared.
-            sets[k] = v;
-        end
-        for k,v in pairs(subsets) do
-            --Check if the Main Job has a predefined set.  If so, it will combine the main job's set with the subjob's set.
-            if(mainsets[k] ~= nil)then
-                sets[k] = gFunc.Combine(mainsets[k], v);
-            else
-                --If no main job set, then it takes the subjob set.
-                sets[k] = v;
-            end
-        end
+        sets = jobHelpers.GetSets(mainsets, subsets)
+        reassignSets = false;
         AshitaCore:GetChatManager():QueueCommand(-1, '/tb palette change '.. main ..'/' .. sub);
+    end
+
+    local env = gData.GetEnvironment();
+    if(env.Weather == 'Dark')then
+        sets.TP.Ear1 = 'Fang Earring';
+    else
+        sets.TP.Ear1 = 'Diabolos\'s Earring';
     end
 
     if(Settings.itemuse == false)then
@@ -131,57 +162,44 @@ profile.HandleDefault = function()
     end
 
     --State Engine
+    local stateSet = sets.Idle;
     if (player.Status == 'Engaged') then
-        local target = gData.GetTarget();
-        local targetId;
-        if(target ~= nil)then
-            targetId = tostring(target.Id);
-        end
 
-        --If TH hasn't been applied,  Equip TH set
-        if(sub == 'THF')then
-            if (help.thTable[targetId] ~= nil) then
-                if (not help.thTable[targetId].THApplied) then
-                    --Set TH Weapon Variable
-                    if (Settings.thWeapons == true) then
-                        gFunc.Equip('Main', 'Thief\'s Knife');
-                        gFunc.Equip('Sub', 'Thief\'s Knife');
-                    end
-                    gFunc.Equip('Hands', "Assassing\'s Armlets");
-                end
-            end
+        --Establish TP Set
+        stateSet = sets.TP;
+
+        --Merge SA and TA
+        if(gData.GetBuffCount('Trick Attack') > 0)then
+            stateSet = gFunc.Combine(stateSet, sets.AGI);
         end
-        if(gData.GetBuffCount('Sneak Attack') > 0 and gData.GetBuffCount('Trick Attack') > 0)then
-            gFunc.EquipSet(gFunc.Combine(sets.SA, sets.TA));
-        elseif(gData.GetBuffCount('Sneak Attack') > 0)then
-            gFunc.EquipSet(sets.SA);
-        elseif(gData.GetBuffCount('Trick Attack') > 0)then
-            gFunc.EquipSet(sets.TA);
-        else
-            gFunc.EquipSet(sets.TP);
+        if(gData.GetBuffCount('Sneak Attack') > 0)then
+            stateSet = gFunc.Combine(stateSet, sets.DEX);
+        end
+        if(player.MainJob == 'THF' or player.SubJob == 'THF')then
+            if(targetId ~= nil and not help.thTable[targetId].THApplied)then
+                stateSet = gFunc.Combine(stateSet, sets.TH);
+            end
         end
 
     elseif (player.Status == 'Resting') then
-        gFunc.EquipSet(sets.Resting);
+        stateSet = sets.Resting;
     else
-        local idleSet = sets.Idle;
+        --Establish Idle Set
+        stateSet = sets.Idle;
+
         --Equip Idle set
-        if(player.MPP <= 40)then
-            idleSet = gFunc.Combine(idleSet, sets.Refresh);
-        end
         if(player.IsMoving)then
-            idleSet = gFunc.Combine(idleSet, sets.MoveSpeed);
+            stateSet = gFunc.Combine(stateSet, sets.MoveSpeed);
         end
         if(pet ~= nil)then
             if(pet.Name == 'Carbuncle')then
-                idleSet = gFunc.Combine(idleSet, sets.Carby);
-            end
-            if(pet.Name == 'Garuda')then
-                idleSet = gFunc.Combine(idleSet, sets.Garuda);
+                stateSet = gFunc.Combine(stateSet, sets.Carby);
             end
         end
-        gFunc.EquipSet(idleSet);
     end
+
+    --Equip Final State Set
+    gFunc.EquipSet(stateSet);
 end
 
 profile.HandleAbility = function()
