@@ -4,7 +4,7 @@ local mod = gFunc.LoadFile('..\\lib\\modifierTables.lua');
 
 local chat = require('chat');
 
-local jobHelpers = require('..\\lib\\JobHelpers.lua')
+local jobHelpers = gFunc.LoadFile('..\\lib\\JobHelpers.lua')
 
 local help = gFunc.LoadFile('..\\lib\\helpers.lua')
 
