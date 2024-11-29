@@ -42,13 +42,17 @@ JobHelpers.GetSets = function(mainsets, subsets)
     end
 
     --Adjust for Main Job Overrides
-    for k,v in pairs(mainOverrides)do
-        sets[k] = gFunc.Combine(sets[k], v);
+    if(mainOverrides ~= nil)then
+        for k,v in pairs(mainOverrides)do
+            sets[k] = gFunc.Combine(sets[k], v);
+        end
     end
 
     --Adjust for Sub Job Overrides
-    for k,v in pairs(subOverrides)do
-        sets[k] = gFunc.Combine(sets[k], v);
+    if(subOverrides ~= nil)then
+        for k,v in pairs(subOverrides)do
+            sets[k] = gFunc.Combine(sets[k], v);
+        end
     end
     return sets;
 end
