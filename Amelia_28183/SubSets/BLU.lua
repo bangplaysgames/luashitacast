@@ -68,6 +68,8 @@ sub.Resting = {
     Waist = 'Hierarch Belt',
 }
 
+sub.Enmity = {}
+
 sub.Override = {}
 
 return sub;

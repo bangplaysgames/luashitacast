@@ -94,6 +94,10 @@ sub.Diab = {
     Ear1 = 'Diabolos\'s Earring'
 }
 
-sub.Override = {}
+sub.Override = {
+    TP = {
+        Sub = 'Ridill'
+    }
+}
 
 return sub;

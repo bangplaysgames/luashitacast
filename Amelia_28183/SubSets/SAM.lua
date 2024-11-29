@@ -1,11 +1,7 @@
 local sub = {}
 
-sub.Med = {
-    Hands = 'Saotome Kote'
-}
-
 sub.TP = {
-    Head = 'Walahra Turban',
+    Head = 'Askar Zucchetto',
     Neck = 'Peacock Charm',
     Ear1 = 'Fang Earring',
     Ear2 = 'Fowling Earring',
@@ -16,7 +12,7 @@ sub.TP = {
     Back = 'Amemet Mantle +1',
     Waist = 'Swift Belt',
     Legs = 'Byakko\'s Haidate',
-    Feet = 'Dusk Ledelsens',
+    Feet = 'Enkidu\'s Leggings',
 }
 
 sub.Idle = {
@@ -47,6 +43,11 @@ sub.STR = {
     Back = 'Amemet Mantle +1',
     Waist = 'Warwolf Belt',
     Feet = 'Askar Gambieras',
+}
+
+sub.Med = {
+    Head = 'Myochin Kabuto',
+    Hands = "Saotome Kote"
 }
 
 sub.Override = {
