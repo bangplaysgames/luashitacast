@@ -112,15 +112,8 @@ profile.HandleDefault = function()
     local target = gData.GetTarget();
     local targetId;
     if(target ~= nil)then
-        targetId = tostring(target.Id);
-    end
-
-    --Create Entry into TH table for target
-    if (targetId ~= nil and (player.MainJob == 'THF' or player.SubJob == 'THF')) then
-        if(help.thTable[targetId] == nil)then
-            help.thTable[targetId] = {}
-            help.thTable[targetId].THApplied = false;
-        end
+        help.TreasureHunter(target.Id);
+        targetId = target.Id;
     end
 
     local main = player.MainJob;
