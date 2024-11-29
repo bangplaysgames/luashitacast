@@ -10,34 +10,38 @@ JobHelpers.GetSets = function(mainsets, subsets)
 
     local sets = {}
 
-    for k,v in pairs(mainsets)do
-        --Bypass Overrides
-        if(k == 'Override')then
-            mainOverrides = v;
-        else
-            --Declare the set name
-            if(sets[k] == nil)then
-                sets[k] = {}
-            end
-            --Define sets from main job.  This is to accommodate any sets that the main job may have defined that are not shared.
-            sets[k] = v;
-        end
-    end
-    for k,v in pairs(subsets) do
-        --Bypass Overrides
-        if(k ~= 'Override')then
-            --Check if the Main Job has a predefined set.  If so, it will combine the main job's set with the subjob's set.
-            if(mainsets[k] ~= nil)then
-                sets[k] = gFunc.Combine(sets[k], v);
+    if(mainsets ~= nil)then
+        for k,v in pairs(mainsets)do
+            --Bypass Overrides
+            if(k == 'Override')then
+                mainOverrides = v;
             else
+                --Declare the set name
                 if(sets[k] == nil)then
                     sets[k] = {}
                 end
-                --If no main job set, then it takes the subjob set.
+                --Define sets from main job.  This is to accommodate any sets that the main job may have defined that are not shared.
                 sets[k] = v;
             end
-        else
-            subOverrides = v;
+        end
+    end
+    if(subsets ~= nil)then
+        for k,v in pairs(subsets) do
+            --Bypass Overrides
+            if(k ~= 'Override')then
+                --Check if the Main Job has a predefined set.  If so, it will combine the main job's set with the subjob's set.
+                if(mainsets[k] ~= nil)then
+                    sets[k] = gFunc.Combine(sets[k], v);
+                else
+                    if(sets[k] == nil)then
+                        sets[k] = {}
+                    end
+                    --If no main job set, then it takes the subjob set.
+                    sets[k] = v;
+                end
+            else
+                subOverrides = v;
+            end
         end
     end
 
