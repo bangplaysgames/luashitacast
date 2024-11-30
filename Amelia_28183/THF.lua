@@ -207,8 +207,11 @@ profile.HandleDefault = function()
             stateSet = gFunc.Combine(stateSet, sets.MoveSpeed);
         end
         if(pet ~= nil)then
+            stateset = gFunc.Combine(stateSet, sets.PetIdle);
             if(pet.Name == 'Carbuncle')then
                 stateSet = gFunc.Combine(stateSet, sets.Carby);
+            elseif(pet.Name == 'Garuda')then
+                stateSet = gFunc.Combine(stateSet, sets.Garuda);
             end
             if(targetId ~= nil and not help.thTable[targetId].THApplied)then
                 stateSet = gFunc.Combine(stateSet, sets.TH);

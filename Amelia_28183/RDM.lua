@@ -1,14 +1,18 @@
 local profile = {};
 
+local imgui = require('imgui')
+
 local mod = gFunc.LoadFile('..\\lib\\modifierTables.lua');
 
-local warpring = function()
-    AshitaCore:GetChatManager():QueueCommand(-1, '/item "Warp Ring" <me>');
-end
+local chat = require('chat');
 
-local help = gFunc.LoadFile('..\\lib\\helpers.lua');
+local help = gFunc.LoadFile('..\\lib\\helpers.lua')
 
 local jobHelpers = gFunc.LoadFile('..\\lib\\JobHelpers.lua');
+
+local subsets;
+local mainsets;
+local reassignSets = false;
 
 local sets = {
 };
@@ -114,7 +118,7 @@ profile.HandleDefault = function()
 
     if(prioChange)then
         if(Settings.jobPriority == 'main')then
-            print('Setting Priority to ' .. main .. ' > ' .. sub);
+            print('Setting Priority to ' .. sub .. ' > ' .. main);
             mainsets = gFunc.LoadFile('SubSets\\'.. sub .. '.lua');
             subsets = gFunc.LoadFile('SubSets\\'.. main .. '.lua');
             reassignSets = true;
@@ -168,10 +172,8 @@ profile.HandleDefault = function()
         if(gData.GetBuffCount('Sneak Attack') > 0)then
             stateSet = gFunc.Combine(stateSet, sets.DEX);
         end
-        if(player.MainJob == 'THF' or player.SubJob == 'THF')then
-            if(targetId ~= nil and not help.thTable[targetId].THApplied)then
-                stateSet = gFunc.Combine(stateSet, sets.TH);
-            end
+        if(targetId ~= nil and not help.thTable[targetId].THApplied)then
+            stateSet = gFunc.Combine(stateSet, sets.TH);
         end
 
     elseif (player.Status == 'Resting') then
@@ -187,6 +189,9 @@ profile.HandleDefault = function()
         if(pet ~= nil)then
             if(pet.Name == 'Carbuncle')then
                 stateSet = gFunc.Combine(stateSet, sets.Carby);
+            end
+            if(targetId ~= nil and not help.thTable[targetId].THApplied)then
+                stateSet = gFunc.Combine(stateSet, sets.TH);
             end
         end
     end

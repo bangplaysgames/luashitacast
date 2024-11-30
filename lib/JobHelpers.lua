@@ -31,7 +31,7 @@ JobHelpers.GetSets = function(mainsets, subsets)
             if(k ~= 'Override')then
                 --Check if the Main Job has a predefined set.  If so, it will combine the main job's set with the subjob's set.
                 if(mainsets[k] ~= nil)then
-                    sets[k] = gFunc.Combine(sets[k], v);
+                    sets[k] = gFunc.Combine(mainsets[k], v);
                 else
                     if(sets[k] == nil)then
                         sets[k] = {}
