@@ -222,6 +222,7 @@ end
 
 profile.HandleAbility = function()
     local act = gData.GetAction();
+    local actName = string.lower(act.Name);
     local player = gData.GetPlayer();
     local isSneak = gData.GetBuffCount('Sneak') > 0;
 
@@ -229,7 +230,7 @@ profile.HandleAbility = function()
     local actionSet = sets.TP;
 
     --If Debuff addon is loaded, remove sneak if it's up for Spectral Jig:
-    if(act.Name == 'Spectral Jig')then
+    if(string.find(actName, 'spectral'))then
         if(isSneak == true)then
             gFunc.CancelAction();
             AshitaCore:GetChatManager():QueueCommand(-1, '/debuff 71');
@@ -237,46 +238,39 @@ profile.HandleAbility = function()
         AshitaCore:GetChatManager():QueueCommand(-1, '/ja "Spectral Jig" <me>');
     end
 
-    if(string.find(act.Name, 'Waltz'))then
+    if(string.find(actName, 'waltz'))then
         actionSet = gFunc.Combine(actionSet, sets.Waltz);
     end
 
-    if(string.find(act.Name, 'Reverse Flourish'))then
+    if(string.find(actName, 'reverse flourish'))then
         actionSet = gFunc.Combine(actionSet, sets.RF);
     end
 
-    if(act.Name == 'Jump' or act.Name == 'High Jump')then
+    if(string.find(actName, 'jump'))then
         actionSet = gFunc.Combine(actionSet, sets.Jump);
-    elseif(act.Name == 'Meditate')then
+    end
+    if(act.Name == 'Meditate')then
         actionSet = gFunc.Combine(actionSet, sets.Med);
     end
 
-    if(string.find(act.Name, 'Jig'))then
+    if(string.find(actName, 'jig'))then
         actionSet = gFunc.Combine(actionSet, sets.Jig);
     end
 
-    if(act.Name == 'Flee')then
+    if(string.find(actName, 'flee'))then
         actionSet = gFunc.Combine(actionSet, sets.Flee);
     end
 
-    if(act.Name == 'Mug')then
+    if(string.find(actName, 'mug'))then
         actionSet = gFunc.Combine(actionSet, sets.Mug);
     end
 
-    if(string.find(act.Name, 'step'))then
+    if(string.find(actName, 'step'))then
         actionSet = gFunc.Combine(actionSet, sets.Step);
     end
 
-    if(act.Name == 'Violent Flourish')then
+    if(string.find(actName, 'violent'))then
         actionSet = gFunc.Combine(actionSet, sets.VF);
-    end
-
-    if(string.find(act.Name, 'waltz'))then
-        actionSet = gFunc.Combine(actionSet, sets.Waltz);
-    end
-
-    if(string.find(act.Name, 'jig'))then
-        actionSet = gFunc.Combine(actionSet, sets.Jig);
     end
 
     gFunc.EquipSet(actionSet);

@@ -582,7 +582,7 @@ modifiers.wearObi = function(o, s)
 end
 
 modifiers.IsMAB = function(ws)
-    local MABWS = T{ 'Seraph Strike', 'Shining Strike', 'Flash Nova', 'Burning Blade', 'Red Lotus Blade', 'Shining Blade', 'Seraph Blade', 'Sanguine Blade', 'Gust Slash', 'Cyclone', 'Aeolian Edge', 'Frostbite', 'Freezebite', 'Dark Harvest', 'Shadow of Death', 'Blade: Teki', 'Blade: To', 'Blade: Chi', 'Blade: Ei', 'Thunder Thrust', 'Raiden Thrust', 'Rock Crusher', 'Earth Breaker', 'Cataclysm', 'Tachi: Goten', 'Tachi: Kagero', 'Tachi: Jinpu'}
+    local MABWS = T{ 'Seraph Strike', 'Shining Strike', 'Flash Nova', 'Burning Blade', 'Red Lotus Blade', 'Shining Blade', 'Seraph Blade', 'Sanguine Blade', 'Gust Slash', 'Cyclone', 'Aeolian Edge', 'Frostbite', 'Freezebite', 'Dark Harvest', 'Shadow of Death', 'Blade: Teki', 'Blade: To', 'Blade: Chi', 'Blade: Ei', 'Thunder Thrust', 'Raiden Thrust', 'Rock Crusher', 'Earth Breaker', 'Cataclysm', 'Tachi: Goten', 'Tachi: Kagero', 'Tachi: Jinpu', 'Leaden Salute'}
 
     if(MABWS:contains(ws))then
         return true;
