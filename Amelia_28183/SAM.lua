@@ -111,6 +111,9 @@ profile.HandleDefault = function()
     local pet = gData.GetPet();
     local target = gData.GetTarget();
     local targetId;
+
+    --Get your current target and pre-populate TH Table with an entry
+    --This allows TH to be recorded on the first action against the target
     if(target ~= nil)then
         help.TreasureHunter(target.Id);
         targetId = target.Id;
@@ -157,7 +160,7 @@ profile.HandleDefault = function()
     end
 
     local env = gData.GetEnvironment();
-    if(env.Weather == 'Dark')then
+    if(env.WeatherElement == 'Dark')then
         sets.TP.Ear1 = 'Fang Earring';
     else
         sets.TP.Ear1 = 'Diabolos\'s Earring';

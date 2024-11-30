@@ -135,7 +135,7 @@ profile.HandleDefault = function()
     end
 
     local env = gData.GetEnvironment();
-    if(env.Weather == 'Dark')then
+    if(env.WeatherElement == 'Dark')then
         sets.TP.Ear1 = 'Fang Earring';
     else
         sets.TP.Ear1 = 'Diabolos\'s Earring';
