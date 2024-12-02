@@ -202,7 +202,7 @@ profile.HandleDefault = function()
         if(gData.GetBuffCount('Sneak Attack') > 0)then
             stateSet = gFunc.Combine(stateSet, sets.DEX);
         end
-        if(targetId ~= nil and not help.thTable[targetId].THApplied)then
+        if(targetId ~= nil and not help.thTable[targetId].THApplied and (player.MainJob == 'THF' or player.SubJob == 'THF'))then
             stateSet = gFunc.Combine(stateSet, sets.TH);
         end
 
@@ -462,7 +462,7 @@ profile.HandleWeaponskill = function()
     end
 
     --Gorget Determination
-    local gorget = mod.GetGorget(act.Name);
+    local gorget = mod.getGorget(act.Name);
     if(Gorgets[gorget] ~= nil)then
         wsSet.Neck = Gorgets[gorget];
     end
