@@ -25,11 +25,11 @@ sub.Idle = {
     Feet = 'Duelist\'s Boots',
 }
 
-sub.Buff = {
+sub.Enhancing = {
     Body = 'Duelist\'s Tabard'
 }
 
-sub.Debuff = {
+sub.Enfeebling = {
     Head = 'Duelist\'s Chapeau',
 }
 
@@ -47,6 +47,14 @@ sub.Elemental = {
 
 }
 
+sub.Healing = {
+
+}
+
+sub.CurePot = {}
+
 sub.MND = {}
+
+sub.MoveSpeed = {}
 
 return sub;

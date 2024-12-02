@@ -106,6 +106,8 @@ JobHelpers.GenerateAllJobs = function()
 
             file:write('local profile = gFunc.LoadFile(\'Global.lua\');\n');
             file:write('\n');
+            file:write('local sets = {}\n');
+            file:write('\n');
             file:write('return profile;');
             file:close();
         end

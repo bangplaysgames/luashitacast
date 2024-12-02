@@ -48,7 +48,11 @@ sub.STR = {
 }
 
 sub.DEX = {
+        Head = 'Voyager Sallet',
+        Ear1 = 'Pixie Earring',
+        Ear2 = 'Pixie Earring',
         Body = 'Etoile Casaque',
+        Ring1 = 'Rajas Ring',
         Feet = 'Etoile Toe Shoes',
 }
 

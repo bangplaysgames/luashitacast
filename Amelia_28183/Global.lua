@@ -221,7 +221,7 @@ profile.HandleDefault = function()
             elseif(pet.Name == 'Garuda')then
                 stateSet = gFunc.Combine(stateSet, sets.Garuda);
             end
-            if(targetId ~= nil and not help.thTable[targetId].THApplied)then
+            if(targetId ~= nil and (main == 'THF' or sub == 'THF') and not help.thTable[targetId].THApplied)then
                 stateSet = gFunc.Combine(stateSet, sets.TH);
             end
         end
