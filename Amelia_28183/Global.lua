@@ -462,9 +462,9 @@ profile.HandleWeaponskill = function()
     end
 
     --Gorget Determination
-    local gorget = mod.getGorget(act.Name);
-    if(Gorgets[gorget] ~= nil)then
-        wsSet.Neck = Gorgets[gorget];
+    local gorget = mod.getGorget(act.Name, Gorgets);
+    if(gorget ~= nil)then
+        wsSet.Neck = gorget;
     end
 
     --Equip Final WS set:
