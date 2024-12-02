@@ -33,6 +33,8 @@ local Gorgets = gFunc.LoadFile('SubSets\\Gorgets.lua');
 
 local staves = gFunc.LoadFile('SubSets\\Staves.lua');
 
+local Obis = gFunc.LoadFile('SubSets\\Obis.lua');
+
 local Settings = {
     TP_Mode = 'Haste',
     wrdelay = 0,
@@ -319,6 +321,11 @@ profile.HandleMidcast = function()
         actionSet = gFunc.Combine(actionSet, sets.MND);
         actionSet = gFunc.Combine(actionSet, sets.Healing);
         actionSet = gFunc.Combine(actionSet, sets.CurePot);
+        if(mod.wearObi(act.Name))then
+            if(Obis[act.Element] ~= nil)then
+                actionSet.Waist = Obis[act.Element];
+            end
+        end
     end
 
     if(act.Skill == 'Enhancing Magic')then
@@ -348,13 +355,18 @@ profile.HandleMidcast = function()
         actionSet = gFunc.Combine(actionSet, sets.Elemental);
         actionSet = gFunc.Combine(actionSet, sets.INT);
         actionSet = gFunc.Combine(actionSet, sets.MAB);
+        if(mod.wearObi(act.Name))then
+            if(Obis[act.Element] ~= nil)then
+                actionSet.Waist = Obis[act.Element];
+            end
+        end
     end
 
     if(act.Skill == 'Blue Magic')then
         local bluType, bluMods = BLU.GetBLU(act.Name);
         if(bluType == 'Healing')then
             actionSet = gFunc.Combine(actionSet, sets.CurePot);
-        elseif(bluType == 'Physical')then
+        elseif(bluType == 'Physical' or bluType == 'Magical')then
             local modString = '';
             for k,v in pairs(bluMods)do
                 actionSet = gFunc.Combine(actionSet, sets[k]);
@@ -362,6 +374,14 @@ profile.HandleMidcast = function()
                     modString = k .. ':  ' .. tostring(v);
                 else
                     modString = modString .. ' | ' .. k .. ':  ' .. tostring(v);
+                end
+            end
+            if(bluType == 'Magical')then
+                actionSet = gFunc.Combine(actionSet, sets.MAB);
+                if(mod.wearObi(act.Name))then
+                    if(Obis[act.Element] ~= nil)then
+                        actionSet.Waist = Obis[act.Element];
+                    end
                 end
             end
             print(chat.message(act.Name) .. chat.header(modString));
@@ -420,11 +440,6 @@ profile.HandleWeaponskill = function()
         end
     end
 
-    --Append MAB gear for Aeolian Edge:
-    if(act.Name == 'Aeolian Edge')then
-        wsSet = gFunc.Combine(wsSet, sets.MAB);
-    end
-
     --Print Mod string to chat log:
     print(chat.message(act.Name .. ':  ') .. chat.header(modstring));
 
@@ -436,6 +451,20 @@ profile.HandleWeaponskill = function()
     --Append DEX for Sneak Attack:
     if(gData.GetBuffCount('Sneak Attack') > 0)then
         wsSet = gFunc.Combine(wsSet, sets.DEX);
+    end
+
+    --Append MAB gear for Aeolian Edge:
+    if(mod.IsMAB(act.Name))then
+        wsSet = gFunc.Combine(wsSet, sets.MAB);
+        if(mod.wearObi)then
+            wsSet.Waist = Obis[act.Element];
+        end
+    end
+
+    --Gorget Determination
+    local gorget = mod.GetGorget(act.Name);
+    if(Gorgets[gorget] ~= nil)then
+        wsSet.Neck = Gorgets[gorget];
     end
 
     --Equip Final WS set:

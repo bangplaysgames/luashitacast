@@ -34,6 +34,8 @@ sub.Idle = {
     Feet = 'Valor Leggings',
 }
 
+sub.FC = {}
+
 sub.Refresh = {
 }
 

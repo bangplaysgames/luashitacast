@@ -4,6 +4,8 @@ sub.Idle = {
     Body = 'Mirage Jubbah'
 }
 
+sub.FC = {}
+
 sub.TP = {}
 
 sub.Refresh = {

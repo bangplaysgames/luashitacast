@@ -1,6 +1,6 @@
 local sub = {}
 
-sub.FastCast = {
+sub.FC = {
     Head = "Warlock\'s Chapeau",
     Body = "Duelist\'s Tabard"
 }
