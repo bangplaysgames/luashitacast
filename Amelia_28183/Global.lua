@@ -36,7 +36,7 @@ local staves = gFunc.LoadFile('SubSets\\Staves.lua');
 local Settings = {
     TP_Mode = 'Haste',
     wrdelay = 0,
-    itemuse = false,
+    itemuse = true,
     thWeapons = true,
     jobPriority = 'main',
     CurrentSub = 'NON',
@@ -177,7 +177,7 @@ profile.HandleDefault = function()
         if(Settings.wrdelay ~= 0)then
             gFunc.Equip('ring1', 'Warp Ring');
         end
-        if(Settings.wrdelay <= os.time())then
+        if(Settings.wrdelay - os.time() <= 0)then
             if(Settings.itemuse == false)then
                 Settings.itemuse = true;
                 warpring();
@@ -296,6 +296,10 @@ profile.HandleItem = function()
 end
 
 profile.HandlePrecast = function()
+    local pcSet = sets.Idle;
+    pcSet = gFunc.Combine(pcSet, sets.FC);
+
+    gFunc.EquipSet(pcSet);
 end
 
 profile.HandleMidcast = function()
