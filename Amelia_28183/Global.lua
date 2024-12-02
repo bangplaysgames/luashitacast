@@ -10,6 +10,8 @@ local help = gFunc.LoadFile('..\\lib\\helpers.lua')
 
 local jobHelpers = gFunc.LoadFile('..\\lib\\JobHelpers.lua');
 
+local BLU = gFunc.LoadFile('..\\lib\\bluTables.lua')
+
 local subsets;
 local mainsets;
 local reassignSets = false;
@@ -29,13 +31,16 @@ profile.Packer = {
 
 local Gorgets = gFunc.LoadFile('SubSets\\Gorgets.lua');
 
+local staves = gFunc.LoadFile('SubSets\\Staves.lua');
+
 local Settings = {
     TP_Mode = 'Haste',
     wrdelay = 0,
     itemuse = false,
     thWeapons = true,
     jobPriority = 'main',
-    CurrentSub = false;
+    CurrentSub = 'NON',
+    useStaves = false,
 }
 
 profile.OnLoad = function()
@@ -44,12 +49,15 @@ profile.OnLoad = function()
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias /warpring /lac fwd warpring');
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias /thweapon /lac fwd thweapon');
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias /jobprio /lac fwd jobprio');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias /usestaves /lac fwd usestaves');
 end
 
 profile.OnUnload = function()
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /tpmode');
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /thweapon');
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /jobprio');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /usestaves');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /warpring');
 end
 
 profile.HandleCommand = function(args)
@@ -97,12 +105,25 @@ profile.HandleCommand = function(args)
             end
         end
         if(args[1]:any('jobprio'))then
+            local main = gData.GetPlayer().MainJob;
+            local sub = gData.GetPlayer().SubJob;
             if(Settings.jobPriority == 'main')then
                 Settings.jobPriority = 'sub';
-                prioChange = true;
+                print('Setting Priority to '.. sub .. ' > ' .. main);
+                reassignSets = true;
             else
                 Settings.jobPriority = 'main';
-                prioChange = true;
+                print('Setting Priority to ' .. main .. ' > ' .. sub);
+                reassignSets = true;
+            end
+        end
+        if(args[1]:any('usestaves'))then
+            if(Settings.useStaves == true)then
+                Settings.useStaves = false;
+                print('Disabling Staff Switching');
+            else
+                Settings.useStaves = true;
+                print('Enabling Staff Switching');
             end
         end
     end
@@ -137,18 +158,8 @@ profile.HandleDefault = function()
         return;
     end
 
-    if(prioChange)then
-        if(Settings.jobPriority == 'main')then
-            print('Setting Priority to ' .. sub .. ' > ' .. main);
-            reassignSets = true;
-        else
-            print('Setting Priority to '.. main .. ' > ' .. sub);
-            reassignSets = true;
-        end
-        prioChange = false;
-    end
-
     if ((sub ~= 'NON' and sub ~= Settings.CurrentSub) or reassignSets)then
+        print(chat.message('Job Change: ') .. chat.header(main .. '/' .. sub));
         Settings.CurrentSub = sub;
         sets = jobHelpers.GetSets(Settings.jobPriority)
         reassignSets = false;
@@ -288,6 +299,91 @@ profile.HandlePrecast = function()
 end
 
 profile.HandleMidcast = function()
+    local act = gData.GetAction();
+    local actName = string.lower(act.Name);
+
+    local actionSet = sets.TP;
+    if(jobHelpers.enmityActions:contains(act.Name))then
+        actionSet = gFunc.Combine(actionSet, sets.Enmity);
+    end
+
+    if(string.find(actName, 'holy'))then
+        actionSet = gFunc.Combine(actionSet, sets.MAB);
+    end
+
+    if(act.Skill == 'Healing Magic')then
+        actionSet = gFunc.Combine(actionSet, sets.MND);
+        actionSet = gFunc.Combine(actionSet, sets.Healing);
+        actionSet = gFunc.Combine(actionSet, sets.CurePot);
+    end
+
+    if(act.Skill == 'Enhancing Magic')then
+        actionSet = gFunc.Combine(actionSet, sets.Enhancing);
+        if(act.Type == 'White Magic')then
+            actionSet = gFunc.Combine(actionSet, sets.MND);
+        else
+            actionSet = gFunc.Combine(actionSet, sets.INT);
+        end
+    end
+
+    if(act.Skill == 'Enfeebling Magic')then
+        actionSet = gFunc.Combine(actionSet, sets.Enfeebling);
+        if(act.Type == 'White Magic')then
+            actionSet = gFunc.Combine(actionSet, sets.MND);
+        else
+            actionSet = gFunc.Combine(actionSet, sets.INT);
+        end
+    end
+
+    if(act.Skill == 'Elemental Magic')then
+        actionSet = gFunc.Combine(actionSet, sets.Elemental);
+        actionSet = gFunc.Combine(actionSet, sets.INT);
+        actionSet = gFunc.Combine(actionSet, sets.MAB);
+    end
+
+    if(act.Skill == 'Blue Magic')then
+        local bluType, bluMods = BLU.GetBLU(act.Name);
+        if(bluType == 'Healing')then
+            actionSet = gFunc.Combine(actionSet, sets.CurePot);
+        elseif(bluType == 'Physical')then
+            local modString = '';
+            for k,v in pairs(bluMods)do
+                actionSet = gFunc.Combine(actionSet, sets[k]);
+                if(modString == '')then
+                    modString = k .. ':  ' .. tostring(v);
+                else
+                    modString = modString .. ' | ' .. k .. ':  ' .. tostring(v);
+                end
+            end
+            print(chat.message(act.Name) .. chat.header(modString));
+        elseif(bluType == 'Enhancing')then
+            actionSet = gFunc.Combine(actionSet, sets.BlueMagic);
+        end
+    end
+
+    if(act.Skill == 'Singing')then
+        actionSet = gFunc.Combine(actionSet, sets.Singing);
+
+        --Grab Initial Instrument (Gjallarhorn Would Go in this Set if you Have it.)
+        local inst = sets.Singing.Ranged;
+
+        --If song-specific sets exist, it's likely an instrument change, specifically
+        if(sets[act.Name] ~= nil)then
+            inst = sets[act.Name].Ranged;
+            actionSet = gFunc.Combine(actionSet, sets[act.Name]);
+        end
+        if(JobHelpers.GetInstrument(inst == 'Wind'))then
+            actionSet = gFunc.Combine(actionSet, sets.Woodwind);
+        elseif(JobHelpers.GetInstrument(inst == 'String'))then
+            actionSet = gFunc.Combine(actionSet, sets.String);
+        end
+    end
+
+    if(Settings.useStaves)then
+        actionSet.Main = staves[act.Element];
+    end
+
+    gFunc.EquipSet(actionSet);
 end
 
 profile.HandlePreshot = function()
@@ -321,7 +417,7 @@ profile.HandleWeaponskill = function()
     end
 
     --Print Mod string to chat log:
-    print(chat.message(act.Name .. ':  '), chat.header(modstring));
+    print(chat.message(act.Name .. ':  ') .. chat.header(modstring));
 
     --Append AGI for Trick Attack:
     if(gData.GetBuffCount('Trick Attack') > 0)then

@@ -63,6 +63,8 @@ sub.MoveSpeed = {}
 
 sub.BlueMagic = {}
 
+sub.CurePot = {}
+
 sub.Resting = {
     Body = 'Mirage Jubbah',
     Waist = 'Hierarch Belt',
