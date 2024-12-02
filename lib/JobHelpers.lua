@@ -4,9 +4,26 @@ JobHelpers.SmnSkill = T{'Shining Ruby','Glittering Ruby','Crimson Howl','Inferno
 
 JobHelpers.enmityActions = T{ 'Animated Flourish', 'Sentinel', 'Reprisal', 'Enlight', 'Rampart', 'Shield Bash', 'Provoke', 'Cure', 'Cure II', 'Cure III', 'Cure IV', 'Magic Fruit', 'Curing Waltz', 'Curing Waltz II', 'Curing Waltz III', 'Curing Waltz IV', 'Atonement', }
 
-JobHelpers.GetSets = function(mainsets, subsets)
+JobHelpers.GetSets = function(priority)
     local subOverrides;
     local mainOverrides;
+
+    local player = gData.GetPlayer();
+    local path = string.format('%sconfig\\addons\\luashitacast\\%s_%u\\SubSets\\', AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId);
+    if(not ashita.fs.exists(path .. player.MainJob .. '.lua'))then
+        JobHelpers.CreateSetFile(player.MainJob);
+    end
+    if(not ashita.fs.exists(path .. player.SubJob .. '.lua'))then
+        JobHelpers.CreateSetFile(player.SubJob);
+    end
+
+    if(priority == 'main')then
+        mainsets = gFunc.LoadFile('SubSets\\'.. player.SubJob .. '.lua');
+        subsets = gFunc.LoadFile('SubSets\\'.. player.MainJob .. '.lua');
+    else
+        subsets = gFunc.LoadFile('SubSets\\' .. player.SubJob .. '.lua');
+        mainsets = gFunc.LoadFile('SubSets\\' .. player.MainJob .. '.lua');
+    end
 
     local sets = {}
 
@@ -58,7 +75,42 @@ JobHelpers.GetSets = function(mainsets, subsets)
             sets[k] = gFunc.Combine(sets[k], v);
         end
     end
+    JobHelpers.GenerateAllJobs();
     return sets;
 end
+
+JobHelpers.CreateSetFile = function(job)
+    local path = string.format('%sconfig\\addons\\luashitacast\\%s_%u\\SubSets\\%s.lua', AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId, job);
+    local file = io.open(path, 'w');
+    if (file == nil) then
+        gFunc.Error('Failed to access file: ' .. path .. '. Likely insufficient Permissions.');
+        return false;
+    end
+    file:write('local sub = {}\n');
+    file:write('\n');
+    file:write('sub.TP = {}\n');
+    file:write('\n');
+    file:write('sub.Idle = {}\n');
+    file:write('\n')
+    file:write('return sub;\n');
+    file:close();
+end
+
+JobHelpers.GenerateAllJobs = function()
+    local path = string.format('%sconfig\\addons\\luashitacast\\%s_%u\\', AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId);
+    local jobs = T{ 'WAR', 'MNK', 'THF', 'WHM', 'BLM', 'RDM', 'PLD', 'DRK', 'BST', 'BRD', 'RNG', 'SMN', 'SAM', 'NIN', 'DRG', 'BLU', 'COR', 'PUP', 'DNC', 'SCH', 'GEO', 'RUN'}
+
+    for i=1,#jobs do
+        if(not ashita.fs.exists(path .. jobs[i] .. '.lua'))then
+            local file = io.open(path .. jobs[i] .. '.lua', 'w');
+
+            file:write('local profile = gFunc.LoadFile(\'Global.lua\');\n');
+            file:write('\n');
+            file:write('return profile;');
+            file:close();
+        end
+    end
+end
+
 
 return JobHelpers;

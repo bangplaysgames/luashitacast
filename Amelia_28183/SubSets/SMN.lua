@@ -44,8 +44,6 @@ sub.Refresh = {
     Body = 'Yinyang Robe'
 }
 
-sub.MoveSpeed = {}
-
 sub.Carby = {
     Hands = 'Carbuncle Mitts'
 }
@@ -58,7 +56,8 @@ sub.TP = {}
 
 sub.Override = {
     Idle = {
-        Body = 'Yinyang Robe'
+        Body = 'Yinyang Robe',
+        Waist = 'Avatar Belt'
     }
 }
 
