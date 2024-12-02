@@ -328,6 +328,11 @@ profile.HandleMidcast = function()
         else
             actionSet = gFunc.Combine(actionSet, sets.INT);
         end
+        if(player.SubJob == 'WHM' or player.MainJob == 'WHM')then
+            if(string.find(actName, 'bar'))then
+                actionSet = gFunc.Combine(actionSet, sets.Bar);
+            end
+        end
     end
 
     if(act.Skill == 'Enfeebling Magic')then
