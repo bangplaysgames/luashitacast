@@ -110,7 +110,7 @@ JobHelpers.CreateSetFile = function(job)
     file:write('\n');
     file:write('sub.Elemental = {}\n');
     file:write('\n');
-    file:write('sub.DarkMagic\n');
+    file:write('sub.DarkMagic = {}\n');
     file:write('\n');
     file:write('sub.Enhancing = {}\n');
     file:write('\n');
@@ -118,7 +118,7 @@ JobHelpers.CreateSetFile = function(job)
     file:write('\n');
     file:write('sub.Healing = {}\n');
     file:write('\n');
-    file:write('sub.Divine\n');
+    file:write('sub.Divine = {}\n');
     file:write('\n');
     file:write('sub.Blue = {}\n');
     file:write('\n');
