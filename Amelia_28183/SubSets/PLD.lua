@@ -118,6 +118,8 @@ sub.Enhancing = {}
 
 sub.CurePot = {}
 
+sub.Healing = {}
+
 sub.Override = {}
 
 return sub;

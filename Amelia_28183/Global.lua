@@ -430,7 +430,6 @@ profile.HandleMidcast = function()
     end
 
     if(Settings.useStaves)then
-        print('trying to equip staff');
         actionSet.Main = Staves[Element];
     end
 
