@@ -152,6 +152,14 @@ JobHelpers.CreateSetFile = function(job)
     file:write('\n');
     file:write('sub.String = {}\n');
     file:write('\n');
+    file:write('sub.MoveSpeed = {}\n');
+    file:write('\n');
+    file:write('sub.Override = {\n');
+    file:write('    TP = {},\n');
+    file:write('\n');
+    file:write('    Idle = {}\n');
+    file:write('}\n');
+    file:write('\n');
     file:write('return sub;\n');
     file:close();
 end
