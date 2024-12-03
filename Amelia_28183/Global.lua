@@ -131,7 +131,7 @@ profile.HandleCommand = function(args)
             end
         end
         if(args[1]:any('exportset'))then
-            local set = gData.GetCurrentySet();
+            local set = gData.GetCurrentSet();
             helpers.ExportSet(set);
         end
     end
