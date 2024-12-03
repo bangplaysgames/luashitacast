@@ -86,7 +86,7 @@ helpers.UpdateTHTable = function()
 end
 
 helpers.ExportSet = function(set)
-	local file = io.open('export\export.lua', 'w');
+	local file = io.open(string.format('%sconfig\\addons\\luashitacast\\%s_%u\\export\export.lua', AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId), 'w');
 	if(file == nil)then
 		print('Unable to create file.  Either export directory is missing or there is a permissions issue');
 		return;
