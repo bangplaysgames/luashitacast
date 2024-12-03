@@ -330,8 +330,8 @@ profile.HandleMidcast = function()
         actionSet = gFunc.Combine(actionSet, sets.Healing);
         actionSet = gFunc.Combine(actionSet, sets.CurePot);
         if(mod.wearObi(act.Name))then
-            if(Obis[act.Element] ~= nil)then
-                actionSet.Waist = Obis[act.Element];
+            if(Obis['Light'] ~= nil)then
+                actionSet.Waist = Obis['Light'];
             end
         end
     end
