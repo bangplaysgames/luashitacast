@@ -10,3 +10,5 @@ local staves = {
     --['Light'] = 'Light Staff',
     --['Dark'] = 'Dark Staff'
 }
+
+return staves;

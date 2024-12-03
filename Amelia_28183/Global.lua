@@ -132,7 +132,7 @@ profile.HandleCommand = function(args)
         end
         if(args[1]:any('exportset'))then
             local set = gData.GetCurrentSet();
-            help.ExportSet(set);
+            help.ExportSet();
         end
     end
 end
@@ -318,7 +318,7 @@ profile.HandleMidcast = function()
     local Element = act.Element;
     local obi = Obis[Element];
 
-    local actionSet = sets.TP;
+    local actionSet = sets.Idle;
     if(jobHelpers.enmityActions:contains(act.Name))then
         actionSet = gFunc.Combine(actionSet, sets.Enmity);
     end
@@ -430,7 +430,8 @@ profile.HandleMidcast = function()
     end
 
     if(Settings.useStaves)then
-        actionSet.Main = Staves[act.Element];
+        print('trying to equip staff');
+        actionSet.Main = Staves[Element];
     end
 
     gFunc.EquipSet(actionSet);

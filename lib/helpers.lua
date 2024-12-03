@@ -85,17 +85,27 @@ helpers.UpdateTHTable = function()
 	end
 end
 
-helpers.ExportSet = function(set)
+helpers.ExportSet = function()
+	print('Exporting Set to File');
+	local set = gData.GetCurrentSet();
+	local equipment = {}
+	local order = T{ 'Main', 'Sub', 'Ranged', 'Ammo', 'Head', 'Neck', 'Ear1', 'Ear2', 'Body', 'Hands', 'Ring1', 'Ring2', 'Back', 'Waist', 'Legs', 'Feet'}
+	for i=1,16 do
+		local slot = order[i];
+		local entry = {}
+		entry.slot = slot;
+		entry.item = set[slot];
+		table.insert(equipment, entry);
+	end
 	local file = io.open(string.format('%sconfig\\addons\\luashitacast\\%s_%u\\export\\export.lua', AshitaCore:GetInstallPath(), gState.PlayerName, gState.PlayerId), 'w');
 	if(file == nil)then
 		print('Unable to create file.  Either export directory is missing or there is a permissions issue');
 		return;
 	end
 	file:write('{\n');
-	if(set ~= nil and #set > 0)then
-		for k,v in pairs(set)do
-			file:write(string.format('	%s = \'%s\',\n', k, v));
-		end
+	for i=1,#equipment do
+		print(chat.message(equipment[i].slot .. ': ') .. chat.header(equipment[i].item));
+		file:write(string.format('	%s = \'%s\',\n', equipment[i].slot, equipment[i].item));
 	end
 	file:write('}');
 	file:close();
