@@ -31,7 +31,7 @@ profile.Packer = {
 
 local Gorgets = gFunc.LoadFile('SubSets\\Gorgets.lua');
 
-local staves = gFunc.LoadFile('SubSets\\Staves.lua');
+local Staves = gFunc.LoadFile('SubSets\\Staves.lua');
 
 local Obis = gFunc.LoadFile('SubSets\\Obis.lua');
 
@@ -315,6 +315,8 @@ profile.HandleMidcast = function()
     local act = gData.GetAction();
     local actName = string.lower(act.Name);
     local player = gData.GetPlayer();
+    local Element = act.Element;
+    local obi = Obis[Element];
 
     local actionSet = sets.TP;
     if(jobHelpers.enmityActions:contains(act.Name))then
@@ -329,7 +331,7 @@ profile.HandleMidcast = function()
         actionSet = gFunc.Combine(actionSet, sets.MND);
         actionSet = gFunc.Combine(actionSet, sets.Healing);
         actionSet = gFunc.Combine(actionSet, sets.CurePot);
-        if(mod.wearObi(act.Name))then
+        if(mod.wearObi(act))then
             if(Obis['Light'] ~= nil)then
                 actionSet.Waist = Obis['Light'];
             end
@@ -363,9 +365,9 @@ profile.HandleMidcast = function()
         actionSet = gFunc.Combine(actionSet, sets.Elemental);
         actionSet = gFunc.Combine(actionSet, sets.INT);
         actionSet = gFunc.Combine(actionSet, sets.MAB);
-        if(mod.wearObi(act.Name))then
-            if(Obis[act.Element] ~= nil)then
-                actionSet.Waist = Obis[act.Element];
+        if(mod.wearObi(act))then
+            if(obi ~= nil)then
+                actionSet.Waist = obi;
             end
         end
     end
@@ -386,9 +388,9 @@ profile.HandleMidcast = function()
             end
             if(bluType == 'Magical')then
                 actionSet = gFunc.Combine(actionSet, sets.MAB);
-                if(mod.wearObi(act.Name))then
-                    if(Obis[act.Element] ~= nil)then
-                        actionSet.Waist = Obis[act.Element];
+                if(mod.wearObi(act))then
+                    if(obi ~= nil)then
+                        actionSet.Waist = obi;
                     end
                 end
             end
@@ -428,7 +430,7 @@ profile.HandleMidcast = function()
     end
 
     if(Settings.useStaves)then
-        actionSet.Main = staves[act.Element];
+        actionSet.Main = Staves[act.Element];
     end
 
     gFunc.EquipSet(actionSet);
