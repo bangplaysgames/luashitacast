@@ -1,12 +1,12 @@
 local staves = {
-    --Populate each of these with the staff name for whichever staff you own.
-    --If you do not have a certain staff, replace it with just a blank string:  ''
-    ['Fire'] = 'Fire Staff',
-    ['Water'] = 'Water Staff',
-    ['Thunder'] = 'Thunder Staff',
-    ['Earth'] = 'Earth Staff',
-    ['Wind'] = 'Wind Staff',
-    ['Ice'] = 'Ice Staff',
-    ['Light'] = 'Light Staff',
-    ['Dark'] = 'Dark Staff'
+    --If you have a staff for one of the elements, then uncomment that line by removing the "--" at the beginning.  If it's HQ, Iridal, Chatoyant, etc.. then change the name of the staff as well.
+
+    --['Fire'] = 'Fire Staff',
+    --['Water'] = 'Water Staff',
+    --['Thunder'] = 'Thunder Staff',
+    --['Earth'] = 'Earth Staff',
+    --['Wind'] = 'Wind Staff',
+    --['Ice'] = 'Ice Staff',
+    --['Light'] = 'Light Staff',
+    --['Dark'] = 'Dark Staff'
 }

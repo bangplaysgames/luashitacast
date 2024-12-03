@@ -558,7 +558,7 @@ modifiers.QuickDraw = function(a)
     end
 end
 
-modifiers.wearObi = function(o, s)
+modifiers.wearObi = function(s)
     local env = gData.GetEnvironment();
 
     local stormTable = {
