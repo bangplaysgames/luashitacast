@@ -114,6 +114,8 @@ sub.Sentinel = {
     Feet = 'Valor Leggings'
 }
 
+sub.Enhancing = {}
+
 sub.CurePot = {}
 
 sub.Override = {}

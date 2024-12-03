@@ -61,4 +61,8 @@ sub.Override = {
     }
 }
 
+sub.FC = {
+    Feet = 'Rostrum Pumps'
+}
+
 return sub;

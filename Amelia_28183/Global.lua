@@ -299,6 +299,7 @@ end
 
 profile.HandlePrecast = function()
     local pcSet = sets.Idle;
+    local player = gData.GetPlayer();
     pcSet = gFunc.Combine(pcSet, sets.FC);
 
     gFunc.EquipSet(pcSet);
@@ -307,6 +308,7 @@ end
 profile.HandleMidcast = function()
     local act = gData.GetAction();
     local actName = string.lower(act.Name);
+    local player = gData.GetPlayer();
 
     local actionSet = sets.TP;
     if(jobHelpers.enmityActions:contains(act.Name))then
@@ -406,6 +408,17 @@ profile.HandleMidcast = function()
         elseif(JobHelpers.GetInstrument(inst == 'String'))then
             actionSet = gFunc.Combine(actionSet, sets.String);
         end
+    end
+
+    if(act.Skill == 'Divine Magic')then
+        actionSet = gFunc.Combine(actionSet, sets.Divine);
+        actionSet = gFunc.Combine(actionSet, sets.MND);
+        actionSet = gFunc.Combine(actionSet, sets.MAB);
+    end
+
+    if(act.Skill == 'Dark Magic')then
+        actionSet = gFunc.Combine(actionSet, sets.DarkMagic);
+        actionSet = gFunc.Combine(actionSet, sets.INT);
     end
 
     if(Settings.useStaves)then
