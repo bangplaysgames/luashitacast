@@ -543,10 +543,11 @@ end
 
 modifiers.getGorget = function(a, g)
     local prop = modifiers.Properties[a];
-    for i = 1,#g do
-        if(helpers.hasEntry(prop, g[i]))then
-            --print(chat.header(tostring(g[i])));
-            return g[i];
+    for i = 1,#prop do
+        local property = prop[i];
+        if(g[property] ~= nil)then
+            --print(chat.header(tostring(g[property])));
+            return g[property];
         end
     end
     return 'Nil';

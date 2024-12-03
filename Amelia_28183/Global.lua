@@ -132,7 +132,7 @@ profile.HandleCommand = function(args)
         end
         if(args[1]:any('exportset'))then
             local set = gData.GetCurrentSet();
-            helpers.ExportSet(set);
+            help.ExportSet(set);
         end
     end
 end
