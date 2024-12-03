@@ -52,6 +52,7 @@ profile.OnLoad = function()
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias /thweapon /lac fwd thweapon');
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias /jobprio /lac fwd jobprio');
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias /usestaves /lac fwd usestaves');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias /exportset /lac fwd exportset');
 end
 
 profile.OnUnload = function()
@@ -60,6 +61,7 @@ profile.OnUnload = function()
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /jobprio');
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /usestaves');
     AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /warpring');
+    AshitaCore:GetChatManager():QueueCommand(-1, '/alias delete /exportset');
 end
 
 profile.HandleCommand = function(args)
@@ -127,6 +129,10 @@ profile.HandleCommand = function(args)
                 Settings.useStaves = true;
                 print('Enabling Staff Switching');
             end
+        end
+        if(args[1]:any('exportset'))then
+            local set = gData.GetCurrentySet();
+            helpers.ExportSet(set);
         end
     end
 end

@@ -85,6 +85,22 @@ helpers.UpdateTHTable = function()
 	end
 end
 
+helpers.ExportSet = function(set)
+	local file = io.open('export\export.lua', 'w');
+	if(file == nil)then
+		print('Unable to create file.  Either export directory is missing or there is a permissions issue');
+		return;
+	end
+	file:write('{\n');
+	if(set ~= nil and #set > 0)then
+		for k,v in pairs(set)do
+			file:write(string.format('	%s = \'%s\',\n', k, v));
+		end
+	end
+	file:write('}');
+	file:close();
+end
+
 ashita.events.register('packet_in', 'helper_packet_in_cb', function(e)
 
 	if(e.id == 0x28)then
