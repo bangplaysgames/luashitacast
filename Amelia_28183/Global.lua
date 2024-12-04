@@ -222,7 +222,7 @@ profile.HandleDefault = function()
         if(player.IsMoving)then
             stateSet = gFunc.Combine(stateSet, sets.MoveSpeed);
         end
-        if(pet ~= nil)then
+        if(pet ~= nil and player.MainJob == 'SMN' or player.SubJob == 'SMN')then
             stateset = gFunc.Combine(stateSet, sets.PetIdle);
             if(pet.Name == 'Carbuncle')then
                 stateSet = gFunc.Combine(stateSet, sets.Carby);
