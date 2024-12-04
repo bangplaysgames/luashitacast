@@ -477,7 +477,7 @@ profile.HandleWeaponskill = function()
     --Append MAB gear for Aeolian Edge:
     if(mod.IsMAB(act.Name))then
         wsSet = gFunc.Combine(wsSet, sets.MAB);
-        if(mod.wearObi)then
+        if(mod.wearObi(act))then
             wsSet.Waist = Obis[act.Element];
         end
     end

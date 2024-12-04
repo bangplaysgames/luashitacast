@@ -487,6 +487,41 @@ modifiers.Properties = {
     ['Impulse Drive'] = {'Shadow', 'Soil', 'Snow'},
 }
 
+local WSElement = T{
+    ['Seraph Strike'] = 'Light',
+    ['Shining Strike'] = 'Light',
+    ['Flash Nova'] = 'Light',
+    ['Burning Blade'] = 'Fire',
+    ['Red Lotus Blade'] = 'Fire',
+    ['Shining Blade'] = 'Light',
+    ['Seraph Blade'] = 'Light',
+    ['Sanguine Blade'] = 'Dark',
+    ['Gust Slash'] = 'Wind',
+    ['Cyclone'] = 'Wind',
+    ['Aeolian Edge'] = 'Wind',
+    ['Frostbite'] = 'Ice',
+    ['Freezebite'] = 'Ice',
+    ['Dark Harvest'] = 'Dark',
+    ['Shadow of Death'] = 'Dark',
+    ['Blade: Teki'] = 'Water',
+    ['Blade: To'] = 'Ice',
+    ['Blade: Chi'] = 'Earth',
+    ['Blade: Ei'] = 'Dark',
+    ['Thunder Thrust'] = 'Thunder',
+    ['Raiden Thrust'] = 'Thunder',
+    ['Rock Crusher'] = 'Earth',
+    ['Earth Breaker'] = 'Earth',
+    ['Cataclysm'] = 'Dark',
+    ['Tachi: Goten'] = 'Thunder',
+    ['Tachi: Kagero'] = 'Fire',
+    ['Tachi: Jinpu'] = 'Wind',
+    ['Hot Shot'] = 'Fire',
+    ['Wildfire'] = 'Fire',
+    ['Leaden Salute'] = 'Dark'
+}
+
+
+
 --Exported Function
 modifiers.getMods = function(a)
     local modTable = {}
@@ -562,6 +597,9 @@ end
 
 modifiers.wearObi = function(s)
     local env = gData.GetEnvironment();
+    if(s.Element == nil)then
+        s.Element = WSElement[s.Name];
+    end
 
     local stormTable = {
         ['Fire'] = 'Firestorm',
@@ -577,6 +615,7 @@ modifiers.wearObi = function(s)
 
     local hasBuff = gData.GetBuffCount(stormTable[s.Element]) > 0;
 
+    print(chat.header(tostring(s.Element)))
 
     if ((s.Element == env.DayElement or s.Element == env.RawWeatherElement or hasBuff))then
         return true;
